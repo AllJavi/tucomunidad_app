@@ -58,9 +58,7 @@ class _VotacionesCardState extends State<VotacionesCard> {
                         child: Padding(
                             padding: const EdgeInsets.all(3),
                             child: Center(
-                                child: Text(widget.votaciones[votacion]['id']
-                                        .toString() +
-                                    " " +
+                                child: Text(
                                     widget.votaciones[votacion]['titulo'])))),
                     Expanded(
                         flex: 5,

@@ -90,26 +90,50 @@ class _PostCardState extends State<PostCard> {
                           child: Text("Edit"),
                           value: 1,
                         ),
-                        PopupMenuItem(
-                          child: const Text("Delete"),
-                          onTap: () async {
-                            if (widget.postData['autor']['id'] ==
-                                widget.usuario['id']) {
-                              final response = await http.post(
-                                  Uri.parse(
-                                      "http://159.89.11.206:8080/api/v1/comunidad/${widget.comunityCode}/post/delete"),
-                                  headers: {"Content-Type": "application/json"},
-                                  body: widget.postData['id'].toString());
-                              if (response.statusCode == 200) {
-                                widget.load();
+                        if (widget.postData['autor']['id'] ==
+                            widget.usuario['id'])
+                          PopupMenuItem(
+                            child: const Text("Delete"),
+                            onTap: () async {
+                              if (widget.postData['autor']['id'] ==
+                                  widget.usuario['id']) {
+                                final response = await http.post(
+                                    Uri.parse(
+                                        "http://159.89.11.206:8080/api/v1/comunidad/${widget.comunityCode}/post/delete"),
+                                    headers: {
+                                      "Content-Type": "application/json"
+                                    },
+                                    body: widget.postData['id'].toString());
+                                if (response.statusCode == 200) {
+                                  widget.load();
+                                } else {
+                                  showDialog<String>(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        AlertDialog(
+                                      title: const Text('Error'),
+                                      content: const Text(
+                                          'Ha habido un error al eliminar el post intentalo mas tarde'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context, 'OK'),
+                                          child: const Text('OK'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
                               } else {
+                                await Future.delayed(
+                                    const Duration(milliseconds: 100));
                                 showDialog<String>(
                                   context: context,
                                   builder: (BuildContext context) =>
                                       AlertDialog(
                                     title: const Text('Error'),
                                     content: const Text(
-                                        'Ha habido un error al eliminar el post intentalo mas tarde'),
+                                        'No puede eliminar un post que no es tuyo'),
                                     actions: <Widget>[
                                       TextButton(
                                         onPressed: () =>
@@ -120,28 +144,9 @@ class _PostCardState extends State<PostCard> {
                                   ),
                                 );
                               }
-                            } else {
-                              await Future.delayed(
-                                  const Duration(milliseconds: 100));
-                              showDialog<String>(
-                                context: context,
-                                builder: (BuildContext context) => AlertDialog(
-                                  title: const Text('Error'),
-                                  content: const Text(
-                                      'No puede eliminar un post que no es tuyo'),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: () =>
-                                          Navigator.pop(context, 'OK'),
-                                      child: const Text('OK'),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }
-                          },
-                          value: 2,
-                        )
+                            },
+                            value: 2,
+                          )
                       ],
                     ),
                   ),

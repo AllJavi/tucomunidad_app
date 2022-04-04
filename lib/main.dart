@@ -37,6 +37,10 @@ class _MyHomePageState extends State<MyHomePage> {
   final appBloc = AppPropertiesBloc();
   final comunityBloc = AppPropertiesBloc();
 
+  void logout() {
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -63,19 +67,53 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: AppBar(
           backgroundColor: const Color(0xFFff7517),
           automaticallyImplyLeading: false,
-          title: GestureDetector(
-              onTap: () {},
-              child: Row(
-                children: <Widget>[
-                  StreamBuilder<String>(
-                      stream: appBloc.titleStream,
-                      initialData: "TuComunidad",
-                      builder: (context, snapshot) {
-                        return Text(snapshot.data ?? '');
-                      }),
-                  const Icon(Icons.arrow_drop_down)
-                ],
-              )),
+          title: StreamBuilder<String>(
+            stream: appBloc.titleStream,
+            initialData: "TuComunidad",
+            builder: (context, snapshot) => GestureDetector(
+                onTap: () {
+                  showModalBottomSheet(
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10))),
+                      context: context,
+                      builder: (context) {
+                        return Container(
+                          padding: const EdgeInsets.only(top: 20),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              ListTile(
+                                leading: const Icon(Icons.house),
+                                title: Text(snapshot.data ?? "tuComunidad"),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              ListTile(
+                                leading: const Icon(Icons.logout),
+                                title: const Text('Logout'),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  logout();
+                                },
+                              ),
+                              ListTile(
+                                onTap: () {},
+                              ),
+                            ],
+                          ),
+                        );
+                      });
+                },
+                child: Row(
+                  children: <Widget>[
+                    Text(snapshot.data ?? ''),
+                    const Icon(Icons.arrow_drop_down)
+                  ],
+                )),
+          ),
           actions: <Widget>[
             Padding(
                 padding: const EdgeInsets.only(right: 20.0),
