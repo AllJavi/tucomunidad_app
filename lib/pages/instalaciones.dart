@@ -1,29 +1,28 @@
 // ignore_for_file: file_names
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:tucomunidad/widgets/instalaciones.dart';
 
-import 'package:tucomunidad/widgets/votaciones.dart';
-import 'package:tucomunidad/widgets/post.dart';
-
-class HomePage extends StatefulWidget {
+class InstalacionesPage extends StatefulWidget {
   final dynamic usuario;
   final void Function(String) changeTitulo;
   final void Function(String) comunityCode;
 
-  const HomePage(
+  const InstalacionesPage(
       {Key? key,
-      this.usuario,
+      required this.usuario,
       required this.changeTitulo,
       required this.comunityCode})
       : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<InstalacionesPage> createState() => _InstalacionesPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _InstalacionesPageState extends State<InstalacionesPage> {
   int comunidadSeleccionada = 0;
   dynamic miComunidad;
 
@@ -40,37 +39,13 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  List<Widget> getPosts(dynamic miComunidad) {
-    List<Widget> posts = <Widget>[];
-    for (var i = 0; i < miComunidad['posts'].length; i++) {
-      posts.add(PostCard(
-          postData: miComunidad['posts'][i],
-          comunityCode: miComunidad['comunityCode'],
-          usuario: widget.usuario,
-          load: () async {
-            dynamic comunidad = await _load();
-            setState(() {
-              miComunidad = comunidad;
-            });
-          }));
+  List<Widget> getInstalaciones(dynamic miComunidad) {
+    List<Widget> instalaciones = <Widget>[];
+    for (var i = 0; i < miComunidad['instalaciones'].length; i++) {
+      instalaciones
+          .add(InstalacionesCard(instalacion: miComunidad['instalaciones'][i]));
     }
-    return posts;
-  }
-
-  List<Widget> getVotaciones(dynamic miComunidad) {
-    List<Widget> votaciones = <Widget>[];
-    if (miComunidad['votaciones'].length != 0) {
-      votaciones.add(VotacionesCard(
-        votaciones: miComunidad['votaciones'],
-      ));
-      votaciones.add(const Padding(
-        padding: EdgeInsets.all(15),
-        child: Divider(
-          thickness: 1,
-        ),
-      ));
-    }
-    return votaciones;
+    return instalaciones;
   }
 
   @override
@@ -95,8 +70,7 @@ class _HomePageState extends State<HomePage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      ...getVotaciones(miComunidad),
-                      ...getPosts(miComunidad).reversed,
+                      ...getInstalaciones(miComunidad),
                       const Padding(
                         padding: EdgeInsets.all(15),
                         child: Divider(

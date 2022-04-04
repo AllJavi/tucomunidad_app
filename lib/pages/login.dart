@@ -60,8 +60,11 @@ class _LoginPageState extends State<LoginPage> {
                     controller: _emailcontroller,
                     keyboardType: TextInputType.text,
                     decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'tus putisimos muertos',
+                      enabledBorder: OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Color(0xFFff7517), width: 2)),
+                      hintText: 'Email',
                     ),
                   ),
                 ),
@@ -76,13 +79,16 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                      const EdgeInsets.symmetric(horizontal: 21, vertical: 16),
                   child: TextField(
                     controller: _passwordcontroller,
                     keyboardType: TextInputType.text,
                     decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'tus putisimos muertos',
+                      enabledBorder: OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Color(0xFFff7517), width: 2)),
+                      hintText: 'Password',
                     ),
                   ),
                 ),
@@ -110,6 +116,20 @@ class _LoginPageState extends State<LoginPage> {
                       } else {
                         _emailcontroller.text = '';
                         _passwordcontroller.text = '';
+
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Error'),
+                            content: const Text('Inicio de sesion no valido'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, 'OK'),
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          ),
+                        );
                       }
                     },
                     child: const Text("LOGIN"),

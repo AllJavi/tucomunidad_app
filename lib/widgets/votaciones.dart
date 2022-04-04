@@ -3,14 +3,18 @@
 import 'package:flutter/material.dart';
 
 class VotacionesCard extends StatefulWidget {
-  const VotacionesCard({Key? key}) : super(key: key);
+  final List<dynamic> votaciones;
+
+  const VotacionesCard({Key? key, required this.votaciones}) : super(key: key);
 
   @override
   State<VotacionesCard> createState() => _VotacionesCardState();
 }
 
 class _VotacionesCardState extends State<VotacionesCard> {
-  bool test = false;
+  bool opcionA = false;
+  bool opcionB = false;
+  int votacion = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -49,13 +53,15 @@ class _VotacionesCardState extends State<VotacionesCard> {
                               borderRadius: BorderRadius.circular(300.0),
                               child: Image.asset('assets/profile.jpg')),
                         )),
-                    const Expanded(
+                    Expanded(
                         flex: 11,
                         child: Padding(
-                            padding: EdgeInsets.all(3),
+                            padding: const EdgeInsets.all(3),
                             child: Center(
-                                child:
-                                    Text("Lorem Ipsum is simply dummy text")))),
+                                child: Text(widget.votaciones[votacion]['id']
+                                        .toString() +
+                                    " " +
+                                    widget.votaciones[votacion]['titulo'])))),
                     Expanded(
                         flex: 5,
                         child: Row(
@@ -63,11 +69,24 @@ class _VotacionesCardState extends State<VotacionesCard> {
                             Expanded(
                                 child: IconButton(
                                     icon: const Icon(Icons.arrow_left),
-                                    onPressed: () {})),
+                                    onPressed: () {
+                                      if (votacion > 0) {
+                                        setState(() {
+                                          votacion--;
+                                        });
+                                      }
+                                    })),
                             Expanded(
                                 child: IconButton(
                                     icon: const Icon(Icons.arrow_right),
-                                    onPressed: () {})),
+                                    onPressed: () {
+                                      if (widget.votaciones.length - 1 >
+                                          votacion) {
+                                        setState(() {
+                                          votacion++;
+                                        });
+                                      }
+                                    })),
                           ],
                         )),
                   ],
@@ -91,9 +110,18 @@ class _VotacionesCardState extends State<VotacionesCard> {
                           SizedBox(
                               height: 30,
                               width: 35,
-                              child:
-                                  Checkbox(value: test, onChanged: (value) {})),
-                          const Text("Opcion A")
+                              child: Checkbox(
+                                  activeColor: const Color(0xFFff7517),
+                                  value: opcionA,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      opcionA = !opcionA;
+                                      if (opcionA && opcionB) {
+                                        opcionB = !opcionB;
+                                      }
+                                    });
+                                  })),
+                          Text(widget.votaciones[votacion]['opcionA'])
                         ],
                       ),
                       Row(
@@ -101,9 +129,18 @@ class _VotacionesCardState extends State<VotacionesCard> {
                           SizedBox(
                               height: 30,
                               width: 35,
-                              child:
-                                  Checkbox(value: test, onChanged: (value) {})),
-                          const Text("Opcion B")
+                              child: Checkbox(
+                                  activeColor: const Color(0xFFff7517),
+                                  value: opcionB,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      opcionB = !opcionB;
+                                      if (opcionA && opcionB) {
+                                        opcionA = !opcionA;
+                                      }
+                                    });
+                                  })),
+                          Text(widget.votaciones[votacion]['opcionB'])
                         ],
                       ),
                     ],

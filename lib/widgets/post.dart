@@ -1,15 +1,41 @@
 // ignore_for_file: file_names
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class PostCard extends StatefulWidget {
-  const PostCard({Key? key}) : super(key: key);
+  final dynamic postData;
+  final String comunityCode;
+  final dynamic usuario;
+  final Function() load;
+
+  const PostCard(
+      {Key? key,
+      required this.postData,
+      required this.comunityCode,
+      required this.usuario,
+      required this.load})
+      : super(key: key);
 
   @override
   State<PostCard> createState() => _PostCardState();
 }
 
 class _PostCardState extends State<PostCard> {
+  late bool upvoted;
+
+  @override
+  void initState() {
+    super.initState();
+    upvoted = false;
+    for (dynamic upvotedUser in widget.postData['upvoted']) {
+      if (upvotedUser['id'] == widget.usuario['id']) {
+        upvoted = true;
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -42,27 +68,92 @@ class _PostCardState extends State<PostCard> {
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text("Paco Jones"),
+                        children: [
+                          Text(widget.postData['autor']['nombre'] +
+                              " " +
+                              widget.postData['autor']['apellidos'].join(" ")),
                           Text(
-                            "Puerta del Garaje",
-                            style: TextStyle(
+                            widget.postData['titulo'],
+                            style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 16),
                           )
                         ],
                       ),
                     ),
                   ),
+                  Expanded(
+                    flex: 4,
+                    child: PopupMenuButton(
+                      child: const Icon(Icons.more_vert),
+                      itemBuilder: (context) => [
+                        const PopupMenuItem(
+                          child: Text("Edit"),
+                          value: 1,
+                        ),
+                        PopupMenuItem(
+                          child: const Text("Delete"),
+                          onTap: () async {
+                            if (widget.postData['autor']['id'] ==
+                                widget.usuario['id']) {
+                              final response = await http.post(
+                                  Uri.parse(
+                                      "http://159.89.11.206:8080/api/v1/comunidad/${widget.comunityCode}/post/delete"),
+                                  headers: {"Content-Type": "application/json"},
+                                  body: widget.postData['id'].toString());
+                              if (response.statusCode == 200) {
+                                widget.load();
+                              } else {
+                                showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                    title: const Text('Error'),
+                                    content: const Text(
+                                        'Ha habido un error al eliminar el post intentalo mas tarde'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.pop(context, 'OK'),
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
+                            } else {
+                              await Future.delayed(
+                                  const Duration(milliseconds: 100));
+                              showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                  title: const Text('Error'),
+                                  content: const Text(
+                                      'No puede eliminar un post que no es tuyo'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, 'OK'),
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                          },
+                          value: 2,
+                        )
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
           ),
-          const Expanded(
+          Expanded(
             flex: 14,
             child: Padding(
-              padding: EdgeInsets.only(left: 15, right: 15),
-              child: Text(
-                  "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."),
+              padding: const EdgeInsets.only(left: 15, right: 15),
+              child: Text(widget.postData['cuerpo']),
             ),
           ),
           Expanded(
@@ -74,8 +165,14 @@ class _PostCardState extends State<PostCard> {
                   IconButton(
                     icon: const Icon(Icons.favorite),
                     iconSize: 20,
-                    color: const Color(0xFFC4C4C4),
-                    onPressed: () {},
+                    color: (upvoted)
+                        ? const Color(0xFFff7517)
+                        : const Color(0xFFC4C4C4),
+                    onPressed: () {
+                      setState(() {
+                        upvoted = !upvoted;
+                      });
+                    },
                   ),
                   IconButton(
                     icon: const Icon(Icons.share),
