@@ -8,6 +8,7 @@ class PostCard extends StatefulWidget {
   final dynamic postData;
   final String comunityCode;
   final dynamic usuario;
+  final dynamic comunidad;
   final Function() load;
 
   const PostCard(
@@ -15,6 +16,7 @@ class PostCard extends StatefulWidget {
       required this.postData,
       required this.comunityCode,
       required this.usuario,
+      required this.comunidad,
       required this.load})
       : super(key: key);
 
@@ -24,14 +26,20 @@ class PostCard extends StatefulWidget {
 
 class _PostCardState extends State<PostCard> {
   late bool upvoted;
+  late dynamic autor;
 
   @override
   void initState() {
     super.initState();
     upvoted = false;
-    for (dynamic upvotedUser in widget.postData['upvoted']) {
-      if (upvotedUser['id'] == widget.usuario['id']) {
-        upvoted = true;
+    // for (dynamic upvotedUser in widget.postData['upvoted']) {
+    //   if (upvotedUser['id'] == widget.usuario['id']) {
+    //     upvoted = true;
+    //   }
+    // }
+    for (var i = 0; i < widget.comunidad["usuarios"].length; i++) {
+      if (widget.comunidad["usuarios"][i]["id"] == widget.postData["autor"]) {
+        autor = widget.comunidad["usuarios"][i];
       }
     }
   }
@@ -69,9 +77,7 @@ class _PostCardState extends State<PostCard> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(widget.postData['autor']['nombre'] +
-                              " " +
-                              widget.postData['autor']['apellidos'].join(" ")),
+                          Text(autor['nombre'] + " " + autor['apellidos']),
                           Text(
                             widget.postData['titulo'],
                             style: const TextStyle(
@@ -90,20 +96,17 @@ class _PostCardState extends State<PostCard> {
                           child: Text("Edit"),
                           value: 1,
                         ),
-                        if (widget.postData['autor']['id'] ==
-                            widget.usuario['id'])
+                        if (autor['id'] == widget.usuario['id'])
                           PopupMenuItem(
                             child: const Text("Delete"),
                             onTap: () async {
-                              if (widget.postData['autor']['id'] ==
-                                  widget.usuario['id']) {
-                                final response = await http.post(
+                              if (autor['id'] == widget.usuario['id']) {
+                                final response = await http.get(
                                     Uri.parse(
-                                        "http://159.89.11.206:8080/api/v1/comunidad/${widget.comunityCode}/post/delete"),
+                                        "http://159.89.11.206:8090/api/v1/post/delete/${widget.postData['id']}"),
                                     headers: {
                                       "Content-Type": "application/json"
-                                    },
-                                    body: widget.postData['id'].toString());
+                                    });
                                 if (response.statusCode == 200) {
                                   widget.load();
                                 } else {

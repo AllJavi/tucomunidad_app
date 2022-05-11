@@ -24,15 +24,45 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int comunidadSeleccionada = 0;
   dynamic miComunidad;
 
   Future _load() async {
-    var comunidadCode = widget.usuario['comunidades'][0];
+    var comunityIndex = widget.usuario["selectedComunity"];
+    var comunidadCode = widget.usuario['comunidades'][comunityIndex];
     final response = await http.get(
-        Uri.parse("http://159.89.11.206:8080/api/v1/comunidad/$comunidadCode"));
+        Uri.parse("http://159.89.11.206:8090/api/v1/comunidad/$comunidadCode"));
+    final posts =
+        await http.get(Uri.parse("http://159.89.11.206:8090/api/v1/post"));
+    final votaciones =
+        await http.get(Uri.parse("http://159.89.11.206:8090/api/v1/votacion"));
+    final reuniones =
+        await http.get(Uri.parse("http://159.89.11.206:8090/api/v1/reunion"));
+    final usuarios =
+        await http.get(Uri.parse("http://159.89.11.206:8090/api/v1/usuario"));
     if (response.statusCode == 200 && response.body != '') {
       dynamic comunidad = jsonDecode(response.body);
+      comunidad['posts'] = jsonDecode(posts.body)
+          .where((post) =>
+              post['comunityCode'] ==
+              widget.usuario['comunidades'][comunityIndex])
+          .toList();
+      comunidad['votaciones'] = jsonDecode(votaciones.body)
+          .where((votacion) =>
+              votacion['comunityCode'] ==
+              widget.usuario['comunidades'][comunityIndex])
+          .toList();
+      comunidad['reuniones'] = jsonDecode(reuniones.body)
+          .where((reunion) =>
+              reunion['comunityCode'] ==
+              widget.usuario['comunidades'][comunityIndex])
+          .toList();
+      comunidad['usuarios'] = jsonDecode(usuarios.body)
+          .where((usuario) =>
+              (usuario['comunidades']
+                  .contains(widget.usuario['comunidades'][comunityIndex])) ==
+              true)
+          .toList();
+
       widget.changeTitulo(comunidad['calle']);
       widget.comunityCode(comunidad['comunityCode']);
       miComunidad = comunidad;
@@ -46,6 +76,7 @@ class _HomePageState extends State<HomePage> {
       posts.add(PostCard(
           postData: miComunidad['posts'][i],
           comunityCode: miComunidad['comunityCode'],
+          comunidad: miComunidad,
           usuario: widget.usuario,
           load: () async {
             dynamic comunidad = await _load();

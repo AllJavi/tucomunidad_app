@@ -116,16 +116,16 @@ class _CreateVotacionPageState extends State<CreateVotacionPage> {
                   var opcionB = _opcionBController.text;
 
                   final response = await http.post(
-                      Uri.parse(
-                          "http://159.89.11.206:8080/api/v1/comunidad/${widget.comunityCode}/votacion"),
+                      Uri.parse("http://159.89.11.206:8090/api/v1/votacion/"),
                       headers: {"Content-Type": "application/json"},
                       body: json.encode({
                         "titulo": titulo,
                         "opcionA": opcionA,
                         "opcionB": opcionB,
-                        "autor": widget.usuario
+                        "autor": widget.usuario['id'],
+                        "comunityCode": widget.comunityCode
                       }).toString());
-                  if (response.statusCode == 200 && response.body != '') {
+                  if (response.statusCode == 200) {
                     Navigator.pop(context);
                   } else {}
                 },

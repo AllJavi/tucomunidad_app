@@ -94,15 +94,15 @@ class _CreatePostPageState extends State<CreatePostPage> {
                   var cuerpo = _cuerpoController.text;
 
                   final response = await http.post(
-                      Uri.parse(
-                          "http://159.89.11.206:8080/api/v1/comunidad/${widget.comunityCode}/post"),
+                      Uri.parse("http://159.89.11.206:8090/api/v1/post/"),
                       headers: {"Content-Type": "application/json"},
                       body: json.encode({
                         "cuerpo": cuerpo,
                         "titulo": titulo,
-                        "autor": widget.usuario
+                        "autor": widget.usuario['id'],
+                        "comunityCode": widget.comunityCode
                       }).toString());
-                  if (response.statusCode == 200 && response.body != '') {
+                  if (response.statusCode == 200) {
                     Navigator.pop(context);
                   } else {}
                 },

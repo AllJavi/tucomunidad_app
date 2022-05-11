@@ -27,11 +27,31 @@ class _InstalacionesPageState extends State<InstalacionesPage> {
   dynamic miComunidad;
 
   Future _load() async {
-    var comunidadCode = widget.usuario['comunidades'][0];
+    var comunityIndex = widget.usuario["selectedComunity"];
+    var comunidadCode = widget.usuario['comunidades'][comunityIndex];
     final response = await http.get(
-        Uri.parse("http://159.89.11.206:8080/api/v1/comunidad/$comunidadCode"));
+        Uri.parse("http://159.89.11.206:8090/api/v1/comunidad/$comunidadCode"));
+    final instalacion = await http
+        .get(Uri.parse("http://159.89.11.206:8090/api/v1/instalacion"));
+    final reservas =
+        await http.get(Uri.parse("http://159.89.11.206:8090/api/v1/reserva"));
+
     if (response.statusCode == 200 && response.body != '') {
       dynamic comunidad = jsonDecode(response.body);
+      comunidad['instalaciones'] = jsonDecode(instalacion.body)
+          .where((instalacion) =>
+              instalacion['comunityCode'] ==
+              widget.usuario['comunidades'][comunityIndex])
+          .toList();
+      var comunidadReservas = jsonDecode(reservas.body).where((reserva) =>
+          reserva["comunityCode"] ==
+          widget.usuario['comunidades'][comunityIndex]);
+      for (var i = 0; i < comunidad['instalaciones'].length; i++) {
+        comunidad['instalaciones'][i]["reservas"] = comunidadReservas
+            .where((reserva) =>
+                comunidad['instalaciones'][i]["id"] == reserva["instalacionId"])
+            .toList();
+      }
       widget.changeTitulo(comunidad['calle']);
       widget.comunityCode(comunidad['comunityCode']);
       miComunidad = comunidad;
@@ -42,8 +62,16 @@ class _InstalacionesPageState extends State<InstalacionesPage> {
   List<Widget> getInstalaciones(dynamic miComunidad) {
     List<Widget> instalaciones = <Widget>[];
     for (var i = 0; i < miComunidad['instalaciones'].length; i++) {
-      instalaciones
-          .add(InstalacionesCard(instalacion: miComunidad['instalaciones'][i]));
+      instalaciones.add(InstalacionesCard(
+          instalacion: miComunidad['instalaciones'][i],
+          comunityCode: miComunidad['comunityCode'],
+          usuario: widget.usuario,
+          load: () async {
+            dynamic comunidad = await _load();
+            setState(() {
+              miComunidad = comunidad;
+            });
+          }));
     }
     return instalaciones;
   }

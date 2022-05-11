@@ -103,11 +103,42 @@ class _LoginPageState extends State<LoginPage> {
                       var email = _emailcontroller.text;
                       var password = _passwordcontroller.text;
                       final response = await http.get(Uri.parse(
-                          "http://159.89.11.206:8080/api/v1/usuario/login?email=$email&password=$password"));
+                          "http://159.89.11.206:8090/api/v1/usuario/login?email=$email&password=$password"));
                       if (response.statusCode == 200 && response.body != '') {
                         dynamic usuario = jsonDecode(response.body);
+                        usuario["comunidades"].add("1958");
+
+                        final usuarios = await http.get(Uri.parse(
+                            "http://159.89.11.206:8090/api/v1/usuario"));
+                        for (var usuarioTest in jsonDecode(usuarios.body)) {
+                          if (usuarioTest["email"] == usuario["email"]) {
+                            usuario["id"] = usuarioTest["id"];
+                          }
+                        }
+
+                        usuario["comunidadesNombre"] = {};
+
+                        final comunidades = await http.get(Uri.parse(
+                            "http://159.89.11.206:8090/api/v1/comunidad"));
+
+                        for (var comunidad in jsonDecode(comunidades.body)) {
+                          if (usuario["comunidades"]
+                              .contains(comunidad["comunityCode"])) {
+                            usuario["comunidadesNombre"]
+                                    [comunidad["comunityCode"]] =
+                                comunidad["calle"];
+                          }
+                        }
+
+                        for (var usuarioTest in jsonDecode(usuarios.body)) {
+                          if (usuarioTest["email"] == usuario["email"]) {
+                            usuario["id"] = usuarioTest["id"];
+                          }
+                        }
+
                         _emailcontroller.text = '';
                         _passwordcontroller.text = '';
+                        usuario["selectedComunity"] = 0;
                         Navigator.push(
                           context,
                           MaterialPageRoute(

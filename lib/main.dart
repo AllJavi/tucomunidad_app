@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:tucomunidad/pages/addComunity.dart';
 import 'package:tucomunidad/pages/create.dart';
 import 'package:tucomunidad/pages/instalaciones.dart';
 import 'package:tucomunidad/pages/login.dart';
+import 'package:tucomunidad/pages/notifications.dart';
 
 import 'pages/home.dart';
 import 'pages/login.dart';
@@ -36,6 +38,13 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final appBloc = AppPropertiesBloc();
   final comunityBloc = AppPropertiesBloc();
+  late dynamic usuario;
+
+  @override
+  void initState() {
+    usuario = widget.usuario;
+    super.initState();
+  }
 
   void logout() {
     Navigator.pop(context);
@@ -57,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => CreatePage(
-                              usuario: widget.usuario,
+                              usuario: usuario,
                               comunityCode: snapshot.data ?? "0")));
                 },
                 child: const Icon(Icons.add),
@@ -84,16 +93,66 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
+                              ...List.generate(usuario["comunidades"].length,
+                                  (index) {
+                                return ListTile(
+                                  leading: Icon(
+                                    Icons.house,
+                                    color: usuario["selectedComunity"] == index
+                                        ? const Color(0xFFff7517)
+                                        : Colors.grey,
+                                  ),
+                                  title: Text(
+                                    usuario["comunidadesNombre"]
+                                        [usuario["comunidades"][index]],
+                                    style: TextStyle(
+                                      color:
+                                          usuario["selectedComunity"] == index
+                                              ? const Color(0xFFff7517)
+                                              : Colors.grey,
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    if (usuario["selectedComunity"] != index) {
+                                      setState(() {
+                                        usuario["selectedComunity"] = index;
+                                      });
+                                    }
+                                    Navigator.pop(context);
+                                  },
+                                );
+                              }),
                               ListTile(
-                                leading: const Icon(Icons.house),
-                                title: Text(snapshot.data ?? "tuComunidad"),
+                                leading: const Icon(
+                                  Icons.add,
+                                  color: Colors.grey,
+                                ),
+                                title: const Text(
+                                  "Agregar Comunidad",
+                                  style: TextStyle(color: Colors.grey),
+                                ),
                                 onTap: () {
                                   Navigator.pop(context);
+
+                                  Navigator.push(
+                                      context,
+                                      PageRouteBuilder(
+                                          opaque: false,
+                                          pageBuilder: (_, __, ___) =>
+                                              AddComunityPopUp(
+                                                usuario: usuario,
+                                              )));
                                 },
                               ),
                               ListTile(
-                                leading: const Icon(Icons.logout),
-                                title: const Text('Logout'),
+                                leading: const Icon(
+                                  Icons.logout,
+                                  color: Colors.grey,
+                                ),
+                                title: const Text(
+                                  'Logout',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
                                 onTap: () {
                                   Navigator.pop(context);
                                   logout();
@@ -118,7 +177,15 @@ class _MyHomePageState extends State<MyHomePage> {
             Padding(
                 padding: const EdgeInsets.only(right: 20.0),
                 child: GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NotificationsPage(
+                                usuario: usuario,
+                              )),
+                    );
+                  },
                   child: const Icon(Icons.notifications),
                 )),
           ],
@@ -130,13 +197,13 @@ class _MyHomePageState extends State<MyHomePage> {
         body: TabBarView(
           children: [
             HomePage(
-              usuario: widget.usuario,
+              usuario: usuario,
               changeTitulo: (nuevoTitulo) => appBloc.updateTitle(nuevoTitulo),
               comunityCode: (comunityCode) =>
                   comunityBloc.updateTitle(comunityCode),
             ),
             InstalacionesPage(
-              usuario: widget.usuario,
+              usuario: usuario,
               changeTitulo: (nuevoTitulo) => appBloc.updateTitle(nuevoTitulo),
               comunityCode: (comunityCode) =>
                   comunityBloc.updateTitle(comunityCode),

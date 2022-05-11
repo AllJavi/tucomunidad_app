@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:tucomunidad/pages/createPost.dart';
 import 'package:tucomunidad/pages/createVotacion.dart';
+import 'package:tucomunidad/pages/createReunion.dart';
 
 class CreatePage extends StatefulWidget {
   final dynamic usuario;
@@ -43,13 +44,17 @@ class _CreatePageState extends State<CreatePage> {
       );
     } else {
       return DefaultTabController(
-        length: 2,
+        length: 3,
         child: Scaffold(
           backgroundColor: const Color(0xFFf5f5f5),
           appBar: AppBar(
             backgroundColor: const Color(0xFFff7517),
             bottom: const TabBar(
-              tabs: [Tab(text: "Post"), Tab(text: "Votaciones")],
+              tabs: [
+                Tab(text: "Post"),
+                Tab(text: "Votacion"),
+                Tab(text: "Reunion")
+              ],
               indicatorColor: Colors.white,
             ),
           ),
@@ -60,6 +65,10 @@ class _CreatePageState extends State<CreatePage> {
                 comunityCode: widget.comunityCode,
               ),
               CreateVotacionPage(
+                usuario: widget.usuario,
+                comunityCode: widget.comunityCode,
+              ),
+              CreateReunionPage(
                 usuario: widget.usuario,
                 comunityCode: widget.comunityCode,
               ),
