@@ -1,41 +1,42 @@
-Date : 2022-05-10 21:57:59
+Date : 2022-05-11 11:40:44
 Directory : /Users/alljavi/Documents/codigo/tucomunidad/lib
-Total : 14 files,  1635 codes, 18 comments, 117 blanks, all 1770 lines
+Total : 15 files,  2110 codes, 33 comments, 150 blanks, all 2293 lines
 
 Languages
 +----------+------------+------------+------------+------------+------------+
 | language | files      | code       | comment    | blank      | total      |
 +----------+------------+------------+------------+------------+------------+
-| Dart     |         14 |      1,635 |         18 |        117 |      1,770 |
+| Dart     |         15 |      2,110 |         33 |        150 |      2,293 |
 +----------+------------+------------+------------+------------+------------+
 
 Directories
 +----------------------------------------------------------------------------+------------+------------+------------+------------+------------+
 | path                                                                       | files      | code       | comment    | blank      | total      |
 +----------------------------------------------------------------------------+------------+------------+------------+------------+------------+
-| .                                                                          |         14 |      1,635 |         18 |        117 |      1,770 |
-| pages                                                                      |          8 |        962 |         13 |         77 |      1,052 |
+| .                                                                          |         15 |      2,110 |         33 |        150 |      2,293 |
+| pages                                                                      |          9 |      1,163 |         23 |        100 |      1,286 |
 | streams                                                                    |          1 |         11 |          1 |          5 |         17 |
-| widgets                                                                    |          4 |        516 |          4 |         24 |        544 |
+| widgets                                                                    |          4 |        732 |          9 |         32 |        773 |
 +----------------------------------------------------------------------------+------------+------------+------------+------------+------------+
 
 Files
 +----------------------------------------------------------------------------+----------+------------+------------+------------+------------+
 | filename                                                                   | language | code       | comment    | blank      | total      |
 +----------------------------------------------------------------------------+----------+------------+------------+------------+------------+
-| /Users/alljavi/Documents/codigo/tucomunidad/lib/main.dart                  | Dart     |        146 |          0 |         11 |        157 |
+| /Users/alljavi/Documents/codigo/tucomunidad/lib/main.dart                  | Dart     |        204 |          0 |         13 |        217 |
+| /Users/alljavi/Documents/codigo/tucomunidad/lib/pages/addComunity.dart     | Dart     |         94 |          1 |         10 |        105 |
 | /Users/alljavi/Documents/codigo/tucomunidad/lib/pages/create.dart          | Dart     |         75 |          1 |          6 |         82 |
 | /Users/alljavi/Documents/codigo/tucomunidad/lib/pages/createPost.dart      | Dart     |        109 |          1 |         10 |        120 |
-| /Users/alljavi/Documents/codigo/tucomunidad/lib/pages/createReunion.dart   | Dart     |        259 |          2 |         14 |        275 |
+| /Users/alljavi/Documents/codigo/tucomunidad/lib/pages/createReunion.dart   | Dart     |        260 |          2 |         14 |        276 |
 | /Users/alljavi/Documents/codigo/tucomunidad/lib/pages/createVotacion.dart  | Dart     |        132 |          1 |         10 |        143 |
-| /Users/alljavi/Documents/codigo/tucomunidad/lib/pages/home.dart            | Dart     |        109 |          1 |         11 |        121 |
-| /Users/alljavi/Documents/codigo/tucomunidad/lib/pages/instalaciones.dart   | Dart     |         84 |          1 |         10 |         95 |
-| /Users/alljavi/Documents/codigo/tucomunidad/lib/pages/login.dart           | Dart     |        139 |          1 |         10 |        150 |
-| /Users/alljavi/Documents/codigo/tucomunidad/lib/pages/notifications.dart   | Dart     |         55 |          5 |          6 |         66 |
+| /Users/alljavi/Documents/codigo/tucomunidad/lib/pages/home.dart            | Dart     |        142 |          1 |         12 |        155 |
+| /Users/alljavi/Documents/codigo/tucomunidad/lib/pages/instalaciones.dart   | Dart     |        111 |          1 |         11 |        123 |
+| /Users/alljavi/Documents/codigo/tucomunidad/lib/pages/login.dart           | Dart     |        151 |         14 |         16 |        181 |
+| /Users/alljavi/Documents/codigo/tucomunidad/lib/pages/notifications.dart   | Dart     |         89 |          1 |         11 |        101 |
 | /Users/alljavi/Documents/codigo/tucomunidad/lib/streams/appbar.dart        | Dart     |         11 |          1 |          5 |         17 |
-| /Users/alljavi/Documents/codigo/tucomunidad/lib/widgets/instalaciones.dart | Dart     |         71 |          1 |          4 |         76 |
-| /Users/alljavi/Documents/codigo/tucomunidad/lib/widgets/post.dart          | Dart     |        194 |          1 |          8 |        203 |
-| /Users/alljavi/Documents/codigo/tucomunidad/lib/widgets/reuniones.dart     | Dart     |        108 |          1 |          5 |        114 |
+| /Users/alljavi/Documents/codigo/tucomunidad/lib/widgets/instalaciones.dart | Dart     |        276 |          1 |         11 |        288 |
+| /Users/alljavi/Documents/codigo/tucomunidad/lib/widgets/post.dart          | Dart     |        192 |          6 |          8 |        206 |
+| /Users/alljavi/Documents/codigo/tucomunidad/lib/widgets/reuniones.dart     | Dart     |        121 |          1 |          6 |        128 |
 | /Users/alljavi/Documents/codigo/tucomunidad/lib/widgets/votaciones.dart    | Dart     |        143 |          1 |          7 |        151 |
-| Total                                                                      |          |      1,635 |         18 |        117 |      1,770 |
+| Total                                                                      |          |      2,110 |         33 |        150 |      2,293 |
 +----------------------------------------------------------------------------+----------+------------+------------+------------+------------+

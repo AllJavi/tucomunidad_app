@@ -174,7 +174,6 @@ class InstalacionesCard extends StatelessWidget {
                                                       },
                                                       body: json.encode({
                                                         "horaInicio": hour,
-                                                        "horaFin": hour,
                                                         "usuario":
                                                             usuario["id"],
                                                         "comunityCode":
@@ -184,7 +183,9 @@ class InstalacionesCard extends StatelessWidget {
                                                       }).toString());
                                                   Navigator.pop(context, 'OK');
                                                   if (response.statusCode ==
-                                                      200) {
+                                                          200 &&
+                                                      jsonDecode(
+                                                          response.body)) {
                                                     load();
                                                   } else {
                                                     showDialog<String>(

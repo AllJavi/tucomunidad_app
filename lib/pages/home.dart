@@ -122,20 +122,23 @@ class _HomePageState extends State<HomePage> {
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: Padding(
                   padding: const EdgeInsets.only(top: 25),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      ...getVotaciones(miComunidad),
-                      ...getPosts(miComunidad).reversed,
-                      const Padding(
-                        padding: EdgeInsets.all(15),
-                        child: Divider(
-                          thickness: 0,
-                          color: Color(0xFff5f5f5),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        ...getVotaciones(miComunidad),
+                        ...getPosts(miComunidad).reversed,
+                        const Padding(
+                          padding: EdgeInsets.all(15),
+                          child: Divider(
+                            thickness: 0,
+                            color: Color(0xFff5f5f5),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

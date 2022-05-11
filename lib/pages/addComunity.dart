@@ -6,8 +6,10 @@ import 'package:http/http.dart' as http;
 
 class AddComunityPopUp extends StatefulWidget {
   final dynamic usuario;
+  final Function(BuildContext) load;
 
-  const AddComunityPopUp({Key? key, @required this.usuario}) : super(key: key);
+  const AddComunityPopUp({Key? key, required this.usuario, required this.load})
+      : super(key: key);
 
   @override
   State<AddComunityPopUp> createState() => _AddComunityPopUpState();
@@ -86,7 +88,7 @@ class _AddComunityPopUpState extends State<AddComunityPopUp> {
 
                           if (response.statusCode == 200 &&
                               jsonDecode(response.body) == true) {
-                            Navigator.pop(context);
+                            widget.load(context);
                           } else {}
                         },
                         child: const Text("LOGIN"),

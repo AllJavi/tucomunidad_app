@@ -1,4 +1,8 @@
+// ignore_for_file: file_names
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:tucomunidad/pages/addComunity.dart';
 import 'package:tucomunidad/pages/create.dart';
 import 'package:tucomunidad/pages/instalaciones.dart';
@@ -141,6 +145,48 @@ class _MyHomePageState extends State<MyHomePage> {
                                           pageBuilder: (_, __, ___) =>
                                               AddComunityPopUp(
                                                 usuario: usuario,
+                                                load: (context) async {
+                                                  final response =
+                                                      await http.get(Uri.parse(
+                                                          "http://159.89.11.206:8090/api/v1/usuario/login?email=${usuario['email']}&password=${usuario['password']}"));
+                                                  if (response.statusCode ==
+                                                          200 &&
+                                                      response.body != '') {
+                                                    dynamic nuevoUsuario =
+                                                        jsonDecode(
+                                                            response.body);
+                                                    nuevoUsuario[
+                                                        "comunidadesNombre"] = {};
+
+                                                    final comunidades =
+                                                        await http.get(Uri.parse(
+                                                            "http://159.89.11.206:8090/api/v1/comunidad"));
+
+                                                    for (var comunidad
+                                                        in jsonDecode(
+                                                            comunidades.body)) {
+                                                      if (nuevoUsuario[
+                                                              "comunidades"]
+                                                          .contains(comunidad[
+                                                              "comunityCode"])) {
+                                                        nuevoUsuario[
+                                                                    "comunidadesNombre"]
+                                                                [comunidad[
+                                                                    "comunityCode"]] =
+                                                            comunidad["calle"];
+                                                      }
+                                                    }
+                                                    nuevoUsuario[
+                                                            "selectedComunity"] =
+                                                        usuario[
+                                                            "selectedComunity"];
+
+                                                    setState(() {
+                                                      usuario = nuevoUsuario;
+                                                    });
+                                                  }
+                                                  Navigator.pop(context);
+                                                },
                                               )));
                                 },
                               ),

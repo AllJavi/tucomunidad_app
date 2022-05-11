@@ -106,15 +106,15 @@ class _LoginPageState extends State<LoginPage> {
                           "http://159.89.11.206:8090/api/v1/usuario/login?email=$email&password=$password"));
                       if (response.statusCode == 200 && response.body != '') {
                         dynamic usuario = jsonDecode(response.body);
-                        usuario["comunidades"].add("1958");
+                        // usuario["comunidades"].add("1958");
 
-                        final usuarios = await http.get(Uri.parse(
-                            "http://159.89.11.206:8090/api/v1/usuario"));
-                        for (var usuarioTest in jsonDecode(usuarios.body)) {
-                          if (usuarioTest["email"] == usuario["email"]) {
-                            usuario["id"] = usuarioTest["id"];
-                          }
-                        }
+                        // final usuarios = await http.get(Uri.parse(
+                        //     "http://159.89.11.206:8090/api/v1/usuario"));
+                        // for (var usuarioTest in jsonDecode(usuarios.body)) {
+                        //   if (usuarioTest["email"] == usuario["email"]) {
+                        //     usuario["id"] = usuarioTest["id"];
+                        //   }
+                        // }
 
                         usuario["comunidadesNombre"] = {};
 
@@ -130,11 +130,11 @@ class _LoginPageState extends State<LoginPage> {
                           }
                         }
 
-                        for (var usuarioTest in jsonDecode(usuarios.body)) {
-                          if (usuarioTest["email"] == usuario["email"]) {
-                            usuario["id"] = usuarioTest["id"];
-                          }
-                        }
+                        // for (var usuarioTest in jsonDecode(usuarios.body)) {
+                        //   if (usuarioTest["email"] == usuario["email"]) {
+                        //     usuario["id"] = usuarioTest["id"];
+                        //   }
+                        // }
 
                         _emailcontroller.text = '';
                         _passwordcontroller.text = '';
